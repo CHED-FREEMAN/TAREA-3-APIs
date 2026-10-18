@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
 }
 
 sealed class Screen(val route: String, val title: String) {
-    object Perros : Screen("perros", "Perros")
+    object Perros : Screen("perros", "Perritos")
     object Caricaturas : Screen("caricaturas", "Caricaturas")
     object Bromas : Screen("bromas", "Bromas")
 }

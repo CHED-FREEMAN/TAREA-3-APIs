@@ -15,7 +15,7 @@ object RetrofitClient {
         .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC })
         .build()
 
-    val api: DogApiService by lazy {
+    val apiDog: DogApiService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(clienteHttp)
