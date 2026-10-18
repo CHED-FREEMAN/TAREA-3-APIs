@@ -12,6 +12,8 @@ object RetrofitClient {
     private const val BASE_URL_DOG = "https://dog.ceo/api/"
     private const val BASE_URL_CARTOONS = "https://api.sampleapis.com/"
 
+    private const val BASE_URL_JOKES = "https://official-joke-api.appspot.com/"
+
     private val clienteHttp: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC })
         .build()
@@ -32,13 +34,13 @@ object RetrofitClient {
             .build()
             .create(CartoonsApiService::class.java)
     }
-    val apiJokes: CartoonsApiService by lazy {
+    val apiJokes: JokesApiService by lazy {
         Retrofit.Builder()
-            .baseUrl(BASE_URL_CARTOONS)
+            .baseUrl(BASE_URL_JOKES)
             .client(clienteHttp)
             .addConverterFactory(GsonConverterFactory.create()) // JSON <-> objetos Kotlin
             .build()
-            .create(CartoonsApiService::class.java)
+            .create(JokesApiService::class.java)
     }
 
 }
