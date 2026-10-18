@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.asStateFlow
 class PerrosViewModel : ViewModel() {
     private val _perros = MutableStateFlow<List<Perro>>(
         listOf(
-            Perro(message = "https://images.dog.ceo/breeds/retriever-golden/n02099601_3004.jpg", status = "success"),
-            Perro(message = "https://images.dog.ceo/breeds/hound-english/n02089973_1.jpg", status = "success"),
-            Perro(message = "https://images.dog.ceo/breeds/poodle-standard/n02113799_2280.jpg", status = "success")
+            Perro(message = "https://images.dog.ceo/breeds/retriever-golden/n02099601_3004.jpg"),
+            Perro(message = "https://images.dog.ceo/breeds/hound-english/n02089973_1.jpg"),
+            Perro(message = "https://images.dog.ceo/breeds/poodle-standard/n02113799_2280.jpg")
         )
     )
     val perros: StateFlow<List<Perro>> = _perros.asStateFlow()

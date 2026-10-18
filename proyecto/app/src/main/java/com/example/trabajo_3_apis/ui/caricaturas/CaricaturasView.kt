@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.trabajo_3_apis.models.Caricatura
 
 @Composable
 fun CaricaturasView(viewModel: CaricaturasViewModel = CaricaturasViewModel()) {
@@ -21,22 +22,27 @@ fun CaricaturasView(viewModel: CaricaturasViewModel = CaricaturasViewModel()) {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(caricaturas) { caricatura ->
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text(text = caricatura.title, style = MaterialTheme.typography.titleLarge)
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = "Año: ${caricatura.year}", style = MaterialTheme.typography.bodyMedium)
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = "Imagen: ${caricatura.image}", style = MaterialTheme.typography.bodySmall)
-                }
-            }
+            CaricaturaCard(caricatura = caricatura)
+        }
+    }
+}
+
+@Composable
+fun CaricaturaCard(caricatura: Caricatura) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(text = caricatura.title, style = MaterialTheme.typography.titleLarge)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = "Año: ${caricatura.year}", style = MaterialTheme.typography.bodyMedium)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = "Imagen: ${caricatura.image}", style = MaterialTheme.typography.bodySmall)
         }
     }
 }

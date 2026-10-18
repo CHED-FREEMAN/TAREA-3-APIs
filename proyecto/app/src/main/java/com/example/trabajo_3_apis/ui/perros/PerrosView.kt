@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.trabajo_3_apis.models.Perro
 
 @Composable
 fun PerrosView(viewModel: PerrosViewModel = PerrosViewModel()) {
@@ -21,20 +22,23 @@ fun PerrosView(viewModel: PerrosViewModel = PerrosViewModel()) {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(perros) { perro ->
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text(text = "Estado: ${perro.status}", style = MaterialTheme.typography.titleMedium)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Imagen URL: ${perro.message}", style = MaterialTheme.typography.bodyMedium)
-                }
-            }
+            PerroCard(perro = perro)
+        }
+    }
+}
+
+@Composable
+fun PerroCard(perro: Perro) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(text = "Imagen URL: ${perro.message}", style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
