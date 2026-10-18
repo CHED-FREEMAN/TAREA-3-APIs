@@ -9,10 +9,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trabajo_3_apis.models.Broma
 
 @Composable
-fun BromasView(viewModel: BromasViewModel = BromasViewModel()) {
+fun BromasView(viewModel: BromasViewModel = viewModel()) {
     val bromas by viewModel.bromas.collectAsState()
 
     LazyColumn(

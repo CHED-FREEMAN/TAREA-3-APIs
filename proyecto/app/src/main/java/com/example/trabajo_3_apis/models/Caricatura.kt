@@ -5,6 +5,7 @@ package com.example.trabajo_3_apis.models
 class Caricatura(
     val title: String,
     val year: Int,
-    val image: String
+    val image: String,
+    val creator: String
 ) {
 }

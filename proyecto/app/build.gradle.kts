@@ -54,6 +54,8 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     // Coil for Image Loading
     implementation("io.coil-kt:coil-compose:2.7.0")
+    // Lifecycle ViewModel Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

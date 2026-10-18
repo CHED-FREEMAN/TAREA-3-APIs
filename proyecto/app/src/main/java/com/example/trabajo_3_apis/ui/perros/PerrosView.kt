@@ -11,11 +11,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.trabajo_3_apis.models.Perro
 
 @Composable
-fun PerrosView(viewModel: PerrosViewModel = PerrosViewModel()) {
+fun PerrosView(viewModel: PerrosViewModel = viewModel()) {
     val perros by viewModel.perros.collectAsState()
 
     LazyColumn(
