@@ -4,11 +4,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -18,21 +21,69 @@ import com.example.trabajo_3_apis.models.Perro
 @Composable
 fun PerrosView(viewModel: PerrosViewModel = viewModel()) {
     val perros by viewModel.perros.collectAsState()
+    val favoritosIds by viewModel.favoritosIds.collectAsState()
+    val favoritos by viewModel.favoritos.collectAsState()
 
-    LazyColumn(
+    var soloFavoritos by remember { mutableStateOf(false) }
+
+    val listaAMostrar = if (soloFavoritos) {
+        favoritos.map { Perro(message = it.imagenUrl) }
+    } else {
+        perros
+    }
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(16.dp)
     ) {
-        items(perros) { perro ->
-            PerroCard(perro = perro)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = if (soloFavoritos) "Perros Favoritos (${favoritos.size})" else "Todos los Perros",
+                style = MaterialTheme.typography.titleMedium
+            )
+            FilterChip(
+                selected = soloFavoritos,
+                onClick = { soloFavoritos = !soloFavoritos },
+                label = { Text(if (soloFavoritos) "Ver Todos" else "Ver Favoritos") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = if (soloFavoritos) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = null,
+                        tint = if (soloFavoritos) Color.Red else LocalContentColor.current
+                    )
+                }
+            )
+        }
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(listaAMostrar) { perro ->
+                val esFavorito = favoritosIds.contains(perro.id)
+                PerroCard(
+                    perro = perro,
+                    esFavorito = esFavorito,
+                    onToggleFavorito = { viewModel.toggleFavorito(perro) }
+                )
+            }
         }
     }
 }
 
 @Composable
-fun PerroCard(perro: Perro) {
+fun PerroCard(
+    perro: Perro,
+    esFavorito: Boolean,
+    onToggleFavorito: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -47,6 +98,19 @@ fun PerroCard(perro: Perro) {
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
+            IconButton(
+                onClick = onToggleFavorito,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(12.dp)
+            ) {
+                Icon(
+                    imageVector = if (esFavorito) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = "Favorito",
+                    tint = if (esFavorito) Color.Red else Color.White,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
         }
     }
 }
