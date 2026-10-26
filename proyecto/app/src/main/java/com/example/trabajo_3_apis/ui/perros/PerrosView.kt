@@ -20,8 +20,7 @@ import com.example.trabajo_3_apis.models.Perro
 
 @Composable
 fun PerrosView(viewModel: PerrosViewModel = viewModel()) {
-    val perros by viewModel.perros.collectAsState()
-    val favoritosIds by viewModel.favoritosIds.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val favoritos by viewModel.favoritos.collectAsState()
 
     var soloFavoritos by remember { mutableStateOf(false) }
@@ -29,7 +28,7 @@ fun PerrosView(viewModel: PerrosViewModel = viewModel()) {
     val listaAMostrar = if (soloFavoritos) {
         favoritos.map { Perro(message = it.imagenUrl) }
     } else {
-        perros
+        uiState.perros
     }
 
     Column(
@@ -62,17 +61,42 @@ fun PerrosView(viewModel: PerrosViewModel = viewModel()) {
             )
         }
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(listaAMostrar) { perro ->
-                val esFavorito = favoritosIds.contains(perro.id)
-                PerroCard(
-                    perro = perro,
-                    esFavorito = esFavorito,
-                    onToggleFavorito = { viewModel.toggleFavorito(perro) }
-                )
+        if (uiState.cargando && uiState.perros.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(listaAMostrar) { perro ->
+                    val esFavorito = uiState.favoritosIds.contains(perro.id)
+                    PerroCard(
+                        perro = perro,
+                        esFavorito = esFavorito,
+                        onToggleFavorito = { viewModel.toggleFavorito(perro) }
+                    )
+                }
+
+                if (!soloFavoritos && uiState.hayMas) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (uiState.cargando) {
+                                CircularProgressIndicator()
+                            } else {
+                                Button(onClick = { viewModel.cargarMas() }) {
+                                    Text("Cargar más")
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
