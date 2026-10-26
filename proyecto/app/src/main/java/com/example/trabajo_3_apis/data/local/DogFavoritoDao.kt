@@ -15,9 +15,15 @@ interface DogFavoritoDao {
     @Query("SELECT id FROM PerrosFavoritos")
     fun observarIdsPerrosFavoritos(): Flow<List<Int>>
 
+    @Query("SELECT COUNT(*) FROM PerrosFavoritos")
+    fun contarFavoritos(): Flow<Int>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertar(favorito: DogFavoritoEntity)
 
     @Query("DELETE FROM PerrosFavoritos WHERE id = :id")
     suspend fun eliminarPorId(id: Int)
+
+    @Query("DELETE FROM PerrosFavoritos")
+    suspend fun eliminarTodos()
 }
