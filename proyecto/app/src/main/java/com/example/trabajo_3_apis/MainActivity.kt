@@ -5,15 +5,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.trabajo_3_apis.ui.auth.AuthViewModel
+import com.example.trabajo_3_apis.ui.auth.LoginScreen
 import com.example.trabajo_3_apis.ui.bromas.BromasView
 import com.example.trabajo_3_apis.ui.caricaturas.CaricaturasView
 import com.example.trabajo_3_apis.ui.perros.PerrosView
@@ -30,7 +36,7 @@ class MainActivity : ComponentActivity() {
                 lightColorScheme()
             }
             MaterialTheme(colorScheme = colorScheme) {
-                MainApp()
+                AuthApp()
             }
         }
     }
@@ -42,9 +48,27 @@ sealed class Screen(val route: String, val title: String) {
     object Bromas : Screen("bromas", "Bromas")
 }
 
+@Composable
+fun AuthApp(authViewModel: AuthViewModel = viewModel()) {
+    val usuario by authViewModel.usuario.collectAsState()
+    val haySesion = usuario != null
+
+    if (!haySesion) {
+        LoginScreen(viewModel = authViewModel)
+    } else {
+        MainApp(
+            correoUsuario = usuario?.email.orEmpty(),
+            onCerrarSesion = authViewModel::cerrarSesion
+        )
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainApp() {
+fun MainApp(
+    correoUsuario: String = "",
+    onCerrarSesion: () -> Unit = {}
+) {
     val items = listOf(
         Screen.Perros,
         Screen.Caricaturas,
@@ -55,11 +79,24 @@ fun MainApp() {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                title = { Text(text = selectedScreen.title) },
-                colors = TopAppBarDefaults.topAppBarColors(
+            CenterAlignedTopAppBar(
+                title = {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(text = selectedScreen.title)
+                        if (correoUsuario.isNotEmpty()) {
+                            Text(correoUsuario, style = MaterialTheme.typography.labelSmall)
+                        }
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onCerrarSesion) {
+                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Cerrar sesión")
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             )
         },

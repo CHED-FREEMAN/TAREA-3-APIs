@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "154139231097",
+    "project_id": "trabajo3apis-upb-christian",
+    "storage_bucket": "trabajo3apis-upb-christian.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154139231097:android:130edbc28a92e55491a5a8",
+        "android_client_info": {
+          "package_name": "com.example.trabajo_3_apis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNtEMXvE_l11DZbX2K-aU64G5HGl08Jk8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
