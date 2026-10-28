@@ -60,6 +60,8 @@ class PerrosViewModel(
             } else {
                 pedirSiguientePagina()
             }
+            // Sincronizar favoritos desde la nube al iniciar
+            repository.sincronizarFavoritosDesdeNube()
         }
         observarFavoritos()
     }
@@ -69,6 +71,19 @@ class PerrosViewModel(
         if (red.cargando || !red.hayMas) return
         _estadoRed.update { it.copy(cargando = true, error = null) }
         viewModelScope.launch { pedirSiguientePagina() }
+    }
+
+    fun refrescarPerros() {
+        viewModelScope.launch {
+            _estadoRed.update { it.copy(cargando = true, error = null) }
+            try {
+                database.dogCacheDao().eliminarTodos()
+                repository.sincronizarFavoritosDesdeNube()
+                pedirSiguientePagina()
+            } catch (e: Exception) {
+                _estadoRed.update { it.copy(cargando = false, error = e.message) }
+            }
+        }
     }
 
     private suspend fun pedirSiguientePagina() {

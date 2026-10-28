@@ -16,4 +16,7 @@ interface DogCacheDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertarTodos(perros: List<DogCacheEntity>)
+
+    @Query("DELETE FROM perros_cache")
+    suspend fun eliminarTodos()
 }
